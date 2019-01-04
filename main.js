@@ -12,7 +12,7 @@ let nw = 1;
 window.onload = () => {
     resize(window.innerWidth, window.innerHeight);
     nw = prompt("Enter the number of terms: ", 1);
-    if (nw < 1) {
+    if (isNaN(nw) || nw < 1 || nw == "") {
         nw = 1;
     }
 }
@@ -63,7 +63,7 @@ function animate() {
  */
 function circle(x, y, r, lineWidth=0) {
     ctx.beginPath();
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "green";
     ctx.arc(x, y, r, 0, 2*Math.PI);
     if (lineWidth == undefined || lineWidth == 0) {
         ctx.fill();
@@ -88,7 +88,7 @@ function circle(x, y, r, lineWidth=0) {
  */
 function line(x1, y1, x2, y2, lineWidth) {
     ctx.beginPath();
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "red";
     if (lineWidth == undefined) {
         ctx.lineWidth = lineWidth;
     }
@@ -106,6 +106,7 @@ function line(x1, y1, x2, y2, lineWidth) {
  *                   default value i.e, 2 will be used.
  */
 function point(x, y, radius) {
+	ctx.fillStyle = "black";
     if (radius == undefined || radius == NaN) {
         ctx.fillRect(x, y, 1, 1);
     } else {
