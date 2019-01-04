@@ -1,1 +1,1 @@
-#Fourier Series
+#Fourier-Series

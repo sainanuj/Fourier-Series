@@ -7,8 +7,14 @@ function resize(w, h) {
     canvas.height = h;
 }
 
+let nw = 1;
+
 window.onload = () => {
     resize(window.innerWidth, window.innerHeight);
+    nw = prompt("Enter the number of terms: ", 1);
+    if (nw < 1) {
+        nw = 1;
+    }
 }
 
 window.onresize = () => {
@@ -120,7 +126,7 @@ let points = [];
 function draw() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
 
-    generic(1);
+    generic(nw);
 
 }
 
@@ -159,14 +165,14 @@ function generic(n) {
 
     theta += 0.01;
     
-    // Draw the wavy curve.
+    // Draw the wave.
     let ax = window.innerWidth/2;
     for (i=0; i<points.length; i++) {
         point(ax, points[i]);
         ax+=0.2;
     }
 
-    // If lengt of points exceeds 1000, pop the extra points.
+    // If length of points exceeds 1300, pop the extra points.
     if (points.length > 1300) {
         points.pop();
     }
