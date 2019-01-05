@@ -8,17 +8,15 @@ function resize(w, h) {
     canvas.height = h;
 }
 
-let nw = 7;
+let nw = 1;
 
 window.onload = () => {
     resize(window.innerWidth, window.innerHeight);
 
-    // NO NEED TO ASK FOR NW ------------------------ (FOR ME)
     nw = prompt("Enter the number of terms: ", 1);
     if (isNaN(nw) || nw < 1 || nw == "") {
         nw = 1;
     }
-    // ----------------------------------------------
 }
 
 window.onresize = () => {
