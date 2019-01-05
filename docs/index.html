@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fourier Series</title>
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas"></canvas>
+</body>
+    <script>
+        let canvas = document.getElementById("myCanvas");
+        let ctx = canvas.getContext("2d");
+        canvas.style.backgroundColor = "white";
+
+        function resize(w, h) {
+            canvas.width = w;
+            canvas.height = h;
+        }
+
+        let nw = 1;
+
+        window.onload = () => {
+            resize(window.innerWidth, window.innerHeight);
+            nw = prompt("Enter the number of terms: ", 1);
+            if (isNaN(nw) || nw < 1 || nw == "") {
+                nw = 1;
+            }
+        }
+
+        window.onresize = () => {
+            resize(window.innerWidth, window.innerHeight);
+        }
+
+        /** --------------------------------------------------------------------------------------- */
+
+        let fpsInterval, startTime, now, then, elapsed;
+
+        /**
+         * This is the starting point for animations to begin.
+         * @param {*} fps Frames per second.
+         */
+        function startAnimation(fps) {
+            fpsInterval = 1000/fps;
+            then = Date.now();
+            startTime = then;
+            animate();
+        }
+
+        /**
+         * Animations
+         */
+        function animate() {
+            requestAnimationFrame(animate);
+            now = Date.now();
+            elapsed = now - then;
+            if (elapsed > fpsInterval) {
+                then = now - (elapsed%fpsInterval)
+
+                // Draw and update here
+                draw();
+            }
+
+        }
+
+        /** ------------------------------------------------------------------------------------- */
+
+        /**
+         * A function for drawing circles.
+         * @param {int} x Abscissa of the circle
+         * @param {int} y Ordinate of the circle
+         * @param {int} r Radius of the circle
+         * @param {int} lineWidth By default 0 and fills the circle
+         */
+        function circle(x, y, r, lineWidth=0) {
+            ctx.beginPath();
+            ctx.strokeStyle = "green";
+            ctx.arc(x, y, r, 0, 2*Math.PI);
+            if (lineWidth == undefined || lineWidth == 0) {
+                ctx.fill();
+            } else {
+                ctx.lineWidth = lineWidth;
+                ctx.stroke();
+            }
+            ctx.closePath();
+            
+        }
+
+        /**
+         * A function for drawing a line.
+         * @param {*} x1 Abscissa of the beginnning of the line.
+         * @param {*} y1 Ordiante of the beginning of the line.
+         * @param {*} x2 Abscissa of the end of the line.
+         * @param {*} y2 Ordinate of the end of the line.
+         * @param {*} lineWidth Width of the line. If lineWidth is undefined
+         *                      the lineWidth will be the the default lineWidth
+         *                      otherwise the lineWidth in the parameter will be
+         *                      used.
+         */
+        function line(x1, y1, x2, y2, lineWidth) {
+            ctx.beginPath();
+            ctx.strokeStyle = "red";
+            if (lineWidth == undefined) {
+                ctx.lineWidth = lineWidth;
+            }
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        /**
+         * Draws a point on the cavas.
+         * @param {*} x The abscissa of the point.
+         * @param {*} y The ordinate of the point.
+         * @param {*} radius The radius of the point... if undefined, its
+         *                   default value i.e, 2 will be used.
+         */
+        function point(x, y, radius) {
+            ctx.fillStyle = "black";
+            if (radius == undefined || radius == NaN) {
+                ctx.fillRect(x, y, 1, 1);
+            } else {
+                ctx.fillRect(x, y, radius, radius);
+            }
+        }
+
+        /** -------------------------------------------------------------------------------------------- */
+
+
+        let r = 60;
+        let theta = 0;
+        let points = [];
+
+        /**
+         * Do the drawing inside the following function.
+         */
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+
+            generic(nw);
+
+        }
+
+        function generic(n) {
+            let x = window.innerWidth/4;
+            let y = window.innerHeight/2;
+
+            point(x, y, 3);
+
+            for (i=0; i<n; i++) {
+
+                let newradius = r * (4 / (((2 * i) + 1) * Math.PI));
+                
+                let prevx = x;
+                let prevy = y;
+
+
+                // Abscissa of the amplitude.
+                let xamp = newradius * Math.cos(theta * ((2 * i) + 1));
+
+                // Ordinate of the amplitude.
+                let yamp = newradius * Math.sin(theta * ((2 * i) + 1));
+
+                x += xamp;
+                y += yamp;
+
+
+                circle(prevx, prevy, newradius, 1);
+
+                line(prevx, prevy, x, y);
+
+                point(x, y, 3);
+            }
+
+            points.unshift(y);
+
+            theta += 0.01;
+            
+            // Draw the wave.
+            let ax = window.innerWidth/2;
+            for (i=0; i<points.length; i++) {
+                point(ax, points[i]);
+                ax+=0.2;
+            }
+
+            // If length of points exceeds 1300, pop the extra points.
+            if (points.length > 1300) {
+                points.pop();
+            }
+            
+            line(x, y, window.innerWidth/2, points[0]);
+        }
+
+        startAnimation(60);
+    </script>
+</html>

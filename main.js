@@ -1,7 +1,6 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
-// DARK-MODE BABY HELL YEAH !   LOOK AT ctx.strokeStyle and ctx.fillStyle THROUGHOUT THE CODE.
 canvas.style.backgroundColor = "black";
 
 function resize(w, h) {
@@ -16,7 +15,7 @@ window.onload = () => {
 
     // NO NEED TO ASK FOR NW ------------------------ (FOR ME)
     nw = prompt("Enter the number of terms: ", 1);
-    if (nw < 1) {
+    if (isNaN(nw) || nw < 1 || nw == "") {
         nw = 1;
     }
     // ----------------------------------------------
@@ -67,8 +66,10 @@ function animate() {
  */
 function circle(x, y, r, lineWidth = 0) {
     ctx.beginPath();
+  
     ctx.strokeStyle = "white";
     ctx.arc(x, y, r, 0, 2 * Math.PI);
+
     if (lineWidth == undefined || lineWidth == 0) {
         ctx.fill();
     } else {
@@ -108,8 +109,8 @@ function line(x1, y1, x2, y2, lineWidth) {
  * @param {*} radius The radius of the point... if undefined, its
  *                   default value i.e, 2 will be used.
  */
-// THIS POINT FUNCTION LOOKS BIT SQUARE SO I CHANGED FUNCTIONALITY ----------------
 function point(x, y, radius) {
+	ctx.fillStyle = "black";
     if (radius == undefined || radius == NaN) {
         // ctx.fillRect(x, y, 1, 1);
         ctx.beginPath();
@@ -177,11 +178,8 @@ function generic(n) {
     }
 
     points.unshift(y);
-
-    // THIS INCREMENT CHANGES THE ANIMATION SPEED ------ I'MEAN OF COURSE, WHY NOT !
+  
     theta += 0.01 * animation_speed;
-    // SO ANIMATION STUFF IS FOR YOU TO MAKE........................................
-    // -----------------------------------------------------------------------------
 
     // Draw the wave.
     let ax = window.innerWidth / 2;
@@ -206,5 +204,4 @@ function generic(n) {
 
 // INCREASE THE ANIMATION SPEED -----------
 // startAnimation(60);
-startAnimation(180);            // FUUUUCK THIS DID NOT WORK.
-// ---------------------------------------- THIS NEED TO BE WORKED OUT ! WITH theta ! THAT'S A WAY. MAYBE.
+startAnimation(180);
